@@ -94,9 +94,11 @@ We onboarded and connected **6 specialized agents** locally inside Switch Consol
 ## 3. How the Channel & Switch Room Are Set Up
 
 ### Messaging Channel & Local Docker Setup
+![alt text](image.png)
 
 1. **Local Mattermost Container:** Switch Console provisions a native local Mattermost server (`mattermost/mattermost-team-edition:11.9.0`) via Docker (`switchdash-local-mattermost-mattermost-1`) mapped to `127.0.0.1:51724:8065` alongside a PostgreSQL instance on port `51725`.
 2. **Docker Health Requirement:** Before deploying the room template or opening channels, verify that Docker is running and the Mattermost container is healthy (`docker ps -a`). If the container is stopped or still booting (`health: starting`), Switch Console will return a `Bridge not running` or channel unreachable error until startup finishes.
+![alt text](<Screenshot 2026-11-07 110406.png>) ![alt text](<Screenshot 2026-11-07 110421.png>) ![alt text](<Screenshot 2026-11-07 110436.png>) ![alt text](<Screenshot 2026-11-07 110453.png>)
 3. **Switch Room Mapping:** We deploy `#citebridge-room` via **Switch Console → Templates → Use template** (or **Your Rooms → Create room**), binding all six local agents (`ai-search-intel`, `citation-researcher`, `partner-discovery`, `partner-evaluator`, `outreach-generator`, and `growth-tracking`) and the local operator (`user`) to the Mattermost channel.
 
 ### Switch Room Configuration (`templates/citebridge-room.yaml`)
