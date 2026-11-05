@@ -1,0 +1,54 @@
+params:
+  name:
+    type: string
+    default: "citebridge-room"
+  description:
+    type: string
+    default: "Multi-agent workspace for analyzing AI search visibility, researching citations, evaluating strategic partners, drafting outreach proposals, and tracking growth and performance metrics for any startup."
+  deploy_agent:
+    type: string
+    default: "ai-search-intel"
+  agent_1:
+    type: string
+    default: "citation-researcher"
+  agent_2:
+    type: string
+    default: "outreach-generator"
+  agent_3:
+    type: string
+    default: "partner-discovery"
+  agent_4:
+    type: string
+    default: "partner-evaluator"
+  agent_5:
+    type: string
+    default: "growth-tracking"
+
+room:
+  name: "{name}"
+  description: "{description}"
+  instructions: |-
+    This room runs an automated 6-step AI Visibility, Partnership, and Growth Pipeline for any startup or product brief posted by the user.
+
+    Follow this strict sequential handoff using @mentions:
+    1. @{deploy_agent}: Triggered first by the user's startup brief. Generates 3-5 high-intent discovery queries, simulates/fetches AI search answers, extracts competitor mentions & cited URLs, and ends by tagging @{agent_1}.
+    2. @{agent_1}: Inspects the cited URLs, explains why they are cited, tags them by category (Newsletter, Community, Directory, Authority Blog), and ends by tagging @{agent_3}.
+    3. @{agent_3}: Maps the categorized sources and adjacent tools into partnership buckets (User Communities, Niche Media/Newsletters, Complementary Platforms) and ends by tagging @{agent_4}.
+    4. @{agent_4}: Scores each potential partner (1-100) on Audience Relevance, Citation Authority, and Feasibility, selects the top 3, and ends by tagging @{agent_2}.
+    5. @{agent_2}: Drafts ready-to-send collaboration proposals for the top 3 partners, asks the Founder in the room for approval or adjustments, and hands off to @{agent_5}.
+    6. @{agent_5}: Tracks post-outreach engagement metrics and AI Share-of-Voice (SoV) growth. Dynamically loops back to @{deploy_agent} to re-verify citation data or instructs @{agent_2} to pivot messaging toward Tier-2 partners if Tier-1 response latency is high.
+
+    Rule: Only act when it is your turn in the chain or when directly mentioned, and always @mention the next agent at the end of your message so the pipeline continues automatically. Human operators can jump in at any point to challenge scores, refine target niches, or redirect outreach mid-flight.
+  bridge: "Mattermost"
+  channel_type: "channel_public"
+  read_visibility: "public"
+  write_visibility: "public"
+  agents:
+    - "{deploy_agent}"
+    - "{agent_1}"
+    - "{agent_2}"
+    - "{agent_3}"
+    - "{agent_4}"
+    - "{agent_5}"
+  users:
+    - "user"
