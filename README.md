@@ -122,7 +122,6 @@ Our Switch Room template defines the workspace using standard `params` and `room
 ```text
 citebridge-switch-workflow/
 ├── README.md                        # Project overview, Switch AI architecture, and local setup guide
-├── .gitignore                       # Excludes local environment variables and cache files
 ├── templates/
 │   └── citebridge-room.yaml         # Switch Room configuration 
 └── agents/                          # Local working directories mapped in Switch Console
