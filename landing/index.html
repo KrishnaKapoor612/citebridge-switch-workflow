@@ -2,774 +2,312 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CiteBridge AI — From AI Citations to Strategic Partnerships</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CiteBridge AI: The Comic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#16130f;--paper:#f6f1e4;--red:#d62a1f;--blue:#1c4a9c;--sky:#bcd3ee;--yellow:#f7c51e;--desk:#0e1a36;
+--dots:radial-gradient(circle,rgba(22,19,15,.2) 1px,transparent 1.5px) 0 0/6px 6px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--desk);color:var(--ink);font-family:'Barlow Condensed','Arial Narrow',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;
+background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1.5px);background-size:8px 8px;
+padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+@media(prefers-color-scheme:dark){:root{--desk:#080f22}}
 
-:root{
-  --bg:#04040e;--bg2:#0a0a1e;--bg3:#0f0f28;--card:#111130;
-  --text:#eef2ff;--text2:#8b8baa;--muted:#55557a;
-  --blue:#3b82f6;--purple:#7c3aed;--cyan:#06b6d4;
-  --amber:#f59e0b;--emerald:#10b981;--rose:#f43f5e;
-  --border:rgba(255,255,255,.06);
-}
+.book{position:relative;width:min(94vw,calc((100svh - 96px)*.72),640px);aspect-ratio:18/25;perspective:2200px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.55))}
+.page{position:absolute;inset:0;container-type:size;transform-origin:left center;transition:transform 1s cubic-bezier(.55,.05,.25,1),visibility 0s;transform-style:preserve-3d;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.page.turned{transform:rotateY(-179deg);visibility:hidden;transition:transform 1s cubic-bezier(.55,.05,.25,1),visibility 0s 1s}
+.front,.back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);border:2px solid var(--ink);overflow:hidden}
+.front{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw}
+.front::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),transparent 5%);pointer-events:none;z-index:5}
+.back{transform:rotateY(180deg);background:var(--paper) var(--dots)}
+.back::after{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(0,0,0,.25),transparent 40%)}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.05));opacity:0;transition:opacity 1s;pointer-events:none;z-index:6}
+.page.up .shade{opacity:1}
 
-html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.65;cursor:none}
+/* type */
+.hd{display:flex;align-items:stretch;gap:2cqw;flex:none}
+.hd .ch{background:var(--red);color:#fff;border:.6cqw solid var(--ink);padding:1cqw 2.2cqw;font:700 2.7cqw/1.1 'Barlow Condensed';display:flex;align-items:center}
+.hd h2{font:400 7.4cqw/1 Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.2cqw;flex:1;display:flex;align-items:center}
+.panel{position:relative;border:.7cqw solid var(--ink);background:#fff;padding:2.4cqw 2.8cqw;box-shadow:1cqw 1cqw 0 var(--ink);min-height:0}
+.panel.dots{background:#fff var(--dots)}
+.cap{font:600 3.5cqw/1.2 'Barlow Condensed';background:var(--yellow);border:.5cqw solid var(--ink);padding:1.2cqw 2cqw;display:inline-block}
+.t{font:600 3.55cqw/1.22 'Barlow Condensed'}
+.t b{font-weight:700;color:var(--red)}
+.big{font:400 6cqw/1 Anton,Impact,sans-serif;text-transform:uppercase}
 
-/* ═══════════ CUSTOM CURSOR ═══════════ */
-.cursor{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:screen;transition:transform .15s ease}
-.cursor-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;pointer-events:none;z-index:10000;transition:transform .08s ease}
-.cursor-glow{width:300px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);border-radius:50%;position:fixed;pointer-events:none;z-index:1;transform:translate(-50%,-50%)}
+/* cover */
+.cover{padding:0!important;gap:0!important;background:var(--yellow)}
+.cover .sun{flex:1;position:relative;border-bottom:.9cqw solid var(--ink);background:repeating-conic-gradient(from 0deg at 50% 78%,var(--sky) 0 6deg,#fff 6deg 12deg);overflow:hidden}
+.cover svg{position:absolute;inset:0;width:100%;height:100%}
+.mast{background:var(--red);border-bottom:.9cqw solid var(--ink);padding:3.4cqw 4cqw 2.2cqw;text-align:center;color:#fff}
+.mast h1{font:400 15.5cqw/.95 Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.4cqw;text-shadow:.9cqw .9cqw 0 var(--ink)}
+.mast p{font:700 3.3cqw/1 'Barlow Condensed';margin-top:1.4cqw;letter-spacing:.5cqw;text-transform:uppercase}
+.foot{padding:3cqw 4.2cqw;display:flex;justify-content:space-between;align-items:center;gap:3cqw}
+.foot .big{font-size:5.6cqw;max-width:62%;line-height:1.05}
+.issue{border:.6cqw solid var(--ink);background:#fff;padding:1.2cqw 2.4cqw;text-align:center;font:700 2.8cqw/1.15 'Barlow Condensed'}
+.issue span{display:block;font:400 6.4cqw/1 Anton,sans-serif}
 
-/* ═══════════ SCROLL PROGRESS ═══════════ */
-.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--rose));z-index:10001;transition:width .1s linear;box-shadow:0 0 12px rgba(59,130,246,.5)}
+/* layouts */
+.grid{flex:1;min-height:0;display:grid;gap:3cqw}
+.g-prob{grid-template-rows:1fr 1fr}
+.g-sol{grid-template-rows:auto 1fr auto}
+.g-ag{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:3cqw}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:2.4cqw}
+.nums .panel{text-align:center;padding:1.6cqw 1cqw;box-shadow:.7cqw .7cqw 0 var(--ink)}
+.nums .big{font-size:9cqw;color:var(--red)}
+.nums .t{font-size:2.8cqw;line-height:1.1}
+.ag{display:flex;flex-direction:column;gap:1.2cqw;padding:0;overflow:hidden}
+.ag h3{font:400 4.1cqw/1.1 Anton,sans-serif;text-transform:uppercase;padding:1.3cqw 2cqw;border-bottom:.6cqw solid var(--ink);display:flex;justify-content:space-between;align-items:baseline}
+.ag h3 i{font:400 5cqw/1 Anton;font-style:normal;opacity:.9}
+.ag:nth-child(3n+1) h3{background:var(--red);color:#fff}
+.ag:nth-child(3n+2) h3{background:var(--blue);color:#fff}
+.ag:nth-child(3n) h3{background:var(--yellow)}
+.ag .handle{font:700 2.8cqw/1 'Barlow Condensed';padding:0 2cqw;color:var(--blue)}
+.ag .t{padding:0 2cqw 1.6cqw;font-size:3cqw;line-height:1.18}
 
-/* ═══════════ NOISE OVERLAY ═══════════ */
-.noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.035}
-.noise::after{content:'';position:absolute;inset:-200%;width:400%;height:400%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");animation:noiseMove 0.5s steps(8) infinite}
-@keyframes noiseMove{to{transform:translate3d(-10%,-10%,0)}}
+/* balloons */
+.talk{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:2cqw}
+.row{display:flex;flex-direction:column;gap:.8cqw;max-width:88%}
+.row.me{align-self:flex-end;align-items:flex-end}
+.who{font:400 3.2cqw/1 Anton,sans-serif;text-transform:uppercase;letter-spacing:.2cqw}
+.row:not(.me) .who{color:var(--blue)}
+.row.me .who{color:var(--red)}
+.bal{background:#fff;border:.6cqw solid var(--ink);border-radius:3.4cqw;padding:1.8cqw 3cqw;position:relative;font:600 3.3cqw/1.22 'Barlow Condensed'}
+.row.me .bal{background:var(--yellow)}
+.bal::after{content:"";position:absolute;bottom:-1.7cqw;left:4cqw;width:3cqw;height:3cqw;background:inherit;border-right:.6cqw solid var(--ink);border-bottom:.6cqw solid var(--ink);transform:rotate(45deg) skew(8deg,8deg)}
+.row.me .bal::after{left:auto;right:4cqw}
+.bal b{color:var(--red);font-weight:700}
+.bal .go{display:block;margin-top:.6cqw;font-weight:700;color:var(--blue)}
+.sfx{align-self:center;font:400 5.4cqw/1 Anton,sans-serif;text-transform:uppercase;color:var(--red);-webkit-text-stroke:.35cqw var(--ink);paint-order:stroke fill;letter-spacing:.3cqw;transform:rotate(-3deg)}
 
-/* ═══════════ THREE.JS CANVAS ═══════════ */
-#three-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* architecture */
+.arch{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:1cqw}
+.arch svg{width:100%;height:100%}
+.stack{display:grid;grid-template-columns:1fr 1fr;gap:.8cqw 3cqw;font:600 2.9cqw/1.15 'Barlow Condensed'}
+.stack b{display:block;font-weight:700;color:var(--blue)}
+.stack span{color:#4b4338}
 
-/* ═══════════ NAV ═══════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;backdrop-filter:blur(30px) saturate(1.6);background:rgba(4,4,14,.45);border-bottom:1px solid var(--border);transition:all .4s cubic-bezier(.16,1,.3,1)}
-nav.scrolled{padding:.7rem 3rem;background:rgba(4,4,14,.92)}
-.brand{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px;cursor:pointer}
-.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
-.nav-links a{color:var(--text2);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .25s;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--blue);transition:width .3s ease}
-.nav-links a:hover{color:var(--text)}
-.nav-links a:hover::after{width:100%}
-.nav-cta{padding:.5rem 1.2rem!important;background:linear-gradient(135deg,var(--blue),var(--purple))!important;color:#fff!important;border-radius:8px;font-weight:600!important;box-shadow:0 0 20px rgba(59,130,246,.2);transition:all .3s!important}
-.nav-cta::after{display:none!important}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(59,130,246,.35)!important}
-.mob-btn{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer}
+/* back cover */
+.endp{background:var(--blue)}
+.end{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4cqw;text-align:center}
+.end .big{font-size:11cqw;color:#fff;text-shadow:.8cqw .8cqw 0 var(--ink);line-height:1}
+.end .cap{align-self:center;font-size:3.6cqw}
+.links{display:flex;flex-direction:column;gap:2.6cqw;margin-top:1cqw}
+.links a{display:block;text-decoration:none;color:var(--ink);background:#fff;border:.7cqw solid var(--ink);box-shadow:1cqw 1cqw 0 var(--ink);padding:2cqw 3cqw;text-align:left;transition:transform .15s,box-shadow .15s}
+.links a:hover,.links a:focus-visible{transform:translate(.5cqw,.5cqw);box-shadow:.5cqw .5cqw 0 var(--ink);outline:none;background:var(--yellow)}
+.links strong{display:block;font:400 5.2cqw/1.05 Anton,sans-serif;text-transform:uppercase}
+.links span{font:600 3cqw/1.2 'Barlow Condensed'}
+.fin{font:700 3cqw/1 'Barlow Condensed';color:#fff;letter-spacing:.4cqw;text-transform:uppercase;margin-top:1cqw}
 
-/* ═══════════ HERO ═══════════ */
-.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}
-.hero-inner{max-width:920px}
-.hero-badge{display:inline-flex;align-items:center;gap:.6rem;padding:.55rem 1.2rem;margin-bottom:2rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:100px;font-size:.78rem;font-weight:600;color:var(--blue);animation:fadeUp .8s ease both;backdrop-filter:blur(8px)}
-.hero-badge .pulse-dot{width:8px;height:8px;background:var(--emerald);border-radius:50%;position:relative}
-.hero-badge .pulse-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--emerald);animation:pingRing 2s ease infinite}
-@keyframes pingRing{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.2);opacity:0}}
+/* controls */
+.ctl{display:flex;align-items:center;gap:18px;color:#fff;font:700 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;height:34px}
+.ctl button{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7);padding:8px 18px;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;transition:background .2s,color .2s,opacity .2s}
+.ctl button:hover:not(:disabled),.ctl button:focus-visible{background:var(--yellow);color:var(--ink);border-color:var(--yellow);outline:none}
+.ctl button:disabled{opacity:.3;cursor:default}
+.ctl output{min-width:64px;text-align:center}
+.hint{position:absolute;left:0;right:0;bottom:1.2cqw;text-align:center;font:600 2.6cqw/1 'Barlow Condensed';color:var(--ink);z-index:2;letter-spacing:.15cqw}
 
-.hero h1{font-size:clamp(2.6rem,6vw,5rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem;letter-spacing:-3px;animation:fadeUp .8s ease .15s both}
-.grad-blue{background:linear-gradient(135deg,#60a5fa,#3b82f6,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradShift 4s ease infinite}
-.grad-warm{background:linear-gradient(135deg,#fbbf24,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradShift 4s ease infinite .5s}
-@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-
-.hero-sub{font-size:1.15rem;color:var(--text2);max-width:680px;margin:0 auto 2.5rem;line-height:1.85;animation:fadeUp .8s ease .3s both}
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s ease .45s both}
-
-/* ─── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.7rem;border-radius:12px;font-size:.92rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
-.btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
-.btn:hover{transform:translateY(-3px)}
-
-.btn-glow{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;box-shadow:0 0 30px rgba(59,130,246,.3)}
-.btn-glow::before{background:linear-gradient(135deg,var(--purple),var(--blue))}
-.btn-glow:hover{box-shadow:0 4px 50px rgba(59,130,246,.45)}
-.btn-glow:hover::before{opacity:1}
-
-.btn-warm{background:linear-gradient(135deg,var(--amber),#ef4444);color:#000;box-shadow:0 0 25px rgba(245,158,11,.25)}
-.btn-warm:hover{box-shadow:0 4px 40px rgba(245,158,11,.4)}
-
-.btn-glass{background:rgba(255,255,255,.04);color:var(--text);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px)}
-.btn-glass:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
-
-/* ─── SCROLL ARROW ─── */
-.scroll-arrow{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.6rem;animation:fadeUp .8s ease .7s both}
-.scroll-arrow span{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--muted)}
-.scroll-arrow-icon{width:24px;height:38px;border:2px solid rgba(255,255,255,.15);border-radius:12px;position:relative}
-.scroll-arrow-icon::after{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:3px;height:8px;background:var(--blue);border-radius:2px;animation:scrollBall 2s ease infinite}
-@keyframes scrollBall{0%{opacity:1;top:7px}100%{opacity:0;top:22px}}
-
-/* ═══════════ SECTIONS ═══════════ */
-section{position:relative;z-index:1;padding:7rem 2rem}
-.wrap{max-width:1200px;margin:0 auto}
-.label{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:4px;color:var(--blue);margin-bottom:1rem;position:relative;padding-left:1.8rem}
-.label::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:1rem;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
-.stitle{font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-1.5px}
-.sdesc{font-size:1.05rem;color:var(--text2);max-width:680px;line-height:1.85}
-
-/* ═══════════ METRICS BAR ═══════════ */
-.metrics{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.metrics .wrap{display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;padding:0}
-.metrics section{padding:2.5rem 0}
-.metric{text-align:center}
-.metric-num{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.metric-label{font-size:.78rem;color:var(--text2);margin-top:.4rem;font-weight:500;text-transform:uppercase;letter-spacing:1px}
-
-/* ═══════════ PROBLEM ═══════════ */
-.problem-sec{background:var(--bg2)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2rem;margin-top:3rem}
-.pcard{background:rgba(17,17,48,.6);border:1px solid var(--border);border-radius:20px;padding:2.5rem;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;backdrop-filter:blur(10px)}
-.pcard::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,transparent 40%,rgba(244,63,94,.3),rgba(245,158,11,.3));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
-.pcard:hover::before{opacity:1}
-.pcard:hover{transform:translateY(-6px);box-shadow:0 25px 70px rgba(0,0,0,.4)}
-.pcard-glow{position:absolute;top:-80px;right:-80px;width:200px;height:200px;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none}
-.pcard:nth-child(1) .pcard-glow{background:var(--rose)}
-.pcard:nth-child(2) .pcard-glow{background:var(--amber)}
-.pcard-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.5rem;position:relative;z-index:1}
-.pcard:nth-child(1) .pcard-icon{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.15)}
-.pcard:nth-child(2) .pcard-icon{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.15)}
-.pcard h3{font-size:1.25rem;font-weight:700;margin-bottom:.85rem;position:relative;z-index:1}
-.pcard p{color:var(--text2);font-size:.92rem;line-height:1.75;position:relative;z-index:1}
-
-/* ═══════════ SOLUTION ═══════════ */
-.solution-sec{background:var(--bg);position:relative;overflow:hidden}
-.solution-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.08;pointer-events:none}
-.solution-orb.o1{width:500px;height:500px;background:var(--blue);top:-100px;left:-200px}
-.solution-orb.o2{width:400px;height:400px;background:var(--purple);bottom:-100px;right:-150px}
-.solution-box{margin-top:3rem;padding:3rem;position:relative;border-radius:20px;overflow:hidden;backdrop-filter:blur(10px);background:rgba(17,17,48,.4)}
-.solution-box::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(59,130,246,.3),rgba(124,58,237,.3),rgba(59,130,246,.1));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.solution-box p{font-size:1.15rem;color:var(--text2);line-height:1.9;text-align:center;max-width:800px;margin:0 auto;position:relative;z-index:1}
-.solution-box strong{color:var(--blue);font-weight:700}
-
-/* ═══════════ TERMINAL ═══════════ */
-.terminal-sec{background:var(--bg2)}
-.terminal{margin-top:3rem;background:#0a0a18;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);max-width:820px;margin-left:auto;margin-right:auto}
-.terminal-bar{display:flex;align-items:center;gap:.5rem;padding:.8rem 1.2rem;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.06)}
-.terminal-dot{width:11px;height:11px;border-radius:50%}
-.terminal-dot.r{background:#ff5f57}.terminal-dot.y{background:#febc2e}.terminal-dot.g{background:#28c840}
-.terminal-title{margin-left:.8rem;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:500}
-.terminal-body{padding:1.5rem 1.8rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:2;min-height:320px;color:var(--text2)}
-.terminal-body .line{opacity:0;transform:translateY(8px);transition:all .4s ease}
-.terminal-body .line.show{opacity:1;transform:translateY(0)}
-.terminal-body .cmd{color:var(--emerald)}
-.terminal-body .agent{color:var(--blue);font-weight:700}
-.terminal-body .success{color:var(--emerald)}
-.terminal-body .handoff{color:var(--amber)}
-.terminal-body .user-cmd{color:var(--purple);font-weight:700}
-.terminal-body .dim{color:var(--muted)}
-.terminal-body .highlight{color:var(--rose)}
-
-/* ═══════════ PIPELINE ═══════════ */
-.pipeline-sec{background:var(--bg)}
-.agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.5rem;margin-top:3rem}
-.acard{background:rgba(17,17,48,.5);border:1px solid var(--border);border-radius:18px;padding:2rem;position:relative;overflow:hidden;cursor:default;transition:border-color .4s,box-shadow .4s;backdrop-filter:blur(6px);transform-style:preserve-3d;perspective:800px}
-.acard:hover{box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.acard-inner{transition:transform .35s ease;transform-style:preserve-3d}
-.acard .num{position:absolute;top:.8rem;right:1.2rem;font-size:3rem;font-weight:900;opacity:.04;line-height:1}
-.acard .abadge{display:inline-block;padding:.3rem .75rem;border-radius:8px;font-size:.72rem;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:1rem}
-.acard h3{font-size:1.08rem;font-weight:700;margin-bottom:.65rem}
-.acard p{color:var(--text2);font-size:.88rem;line-height:1.7}
-.acard-glow{position:absolute;bottom:-50px;left:-50px;width:150px;height:150px;border-radius:50%;filter:blur(60px);opacity:0;transition:opacity .4s;pointer-events:none}
-.acard:hover .acard-glow{opacity:.15}
-
-.acard:nth-child(1) .abadge{background:rgba(59,130,246,.1);color:var(--blue)}
-.acard:nth-child(1):hover{border-color:rgba(59,130,246,.3)}.acard:nth-child(1) .acard-glow{background:var(--blue)}
-.acard:nth-child(2) .abadge{background:rgba(6,182,212,.1);color:var(--cyan)}
-.acard:nth-child(2):hover{border-color:rgba(6,182,212,.3)}.acard:nth-child(2) .acard-glow{background:var(--cyan)}
-.acard:nth-child(3) .abadge{background:rgba(124,58,237,.1);color:var(--purple)}
-.acard:nth-child(3):hover{border-color:rgba(124,58,237,.3)}.acard:nth-child(3) .acard-glow{background:var(--purple)}
-.acard:nth-child(4) .abadge{background:rgba(245,158,11,.1);color:var(--amber)}
-.acard:nth-child(4):hover{border-color:rgba(245,158,11,.3)}.acard:nth-child(4) .acard-glow{background:var(--amber)}
-.acard:nth-child(5) .abadge{background:rgba(16,185,129,.1);color:var(--emerald)}
-.acard:nth-child(5):hover{border-color:rgba(16,185,129,.3)}.acard:nth-child(5) .acard-glow{background:var(--emerald)}
-.acard:nth-child(6) .abadge{background:rgba(244,63,94,.1);color:var(--rose)}
-.acard:nth-child(6):hover{border-color:rgba(244,63,94,.3)}.acard:nth-child(6) .acard-glow{background:var(--rose)}
-
-/* flow bar */
-.flow-bar{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-top:3rem;flex-wrap:wrap;padding:1.5rem;background:rgba(17,17,48,.3);border:1px solid var(--border);border-radius:14px;backdrop-filter:blur(6px)}
-.flow-node{padding:.4rem .8rem;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.72rem;font-weight:600;font-family:'JetBrains Mono',monospace;transition:all .3s}
-.flow-node:hover{border-color:var(--blue);background:rgba(59,130,246,.08)}
-.flow-arrow{color:var(--blue);font-size:1.1rem;animation:arrowPulse 2s ease infinite}
-@keyframes arrowPulse{0%,100%{opacity:.4}50%{opacity:1}}
-
-/* ═══════════ ARCHITECTURE ═══════════ */
-.arch-sec{background:var(--bg2)}
-.arch-frame{margin-top:3rem;border-radius:20px;overflow:hidden;border:1px solid var(--border);position:relative;box-shadow:0 30px 100px rgba(0,0,0,.5)}
-.arch-frame::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(59,130,246,.2),transparent 50%,rgba(124,58,237,.2));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:1;pointer-events:none}
-.arch-frame img{width:100%;height:auto;display:block}
-
-/* ═══════════ TECH STACK ═══════════ */
-.tech-sec{background:var(--bg)}
-.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-top:3rem}
-.tcard{background:rgba(17,17,48,.4);border:1px solid var(--border);border-radius:14px;padding:1.4rem;display:flex;align-items:flex-start;gap:.9rem;backdrop-filter:blur(6px);transition:all .35s ease}
-.tcard:hover{border-color:rgba(59,130,246,.2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.25)}
-.tcard-icon{width:44px;height:44px;border-radius:11px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.tcard h4{font-size:.92rem;font-weight:700;margin-bottom:.2rem}
-.tcard p{color:var(--muted);font-size:.78rem;line-height:1.55}
-
-/* ═══════════ RESOURCES ═══════════ */
-.res-sec{background:var(--bg2)}
-.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.75rem;margin-top:3rem}
-.rcard{background:rgba(17,17,48,.5);border:1px solid var(--border);border-radius:20px;padding:2.5rem;text-align:center;transition:all .4s ease;backdrop-filter:blur(6px);position:relative;overflow:hidden}
-.rcard::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,transparent 40%,rgba(59,130,246,.15));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
-.rcard:hover::before{opacity:1}
-.rcard:hover{transform:translateY(-5px);box-shadow:0 25px 70px rgba(0,0,0,.35)}
-.rcard .ri{font-size:2.5rem;margin-bottom:1.3rem}
-.rcard h3{font-size:1.2rem;font-weight:700;margin-bottom:.7rem}
-.rcard p{color:var(--text2);font-size:.88rem;margin-bottom:1.5rem;line-height:1.7}
-
-/* ═══════════ FOOTER ═══════════ */
-footer{background:var(--bg);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;position:relative;z-index:1}
-.foot-brand{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
-footer>p{color:var(--muted);font-size:.8rem}
-.foot-links{display:flex;gap:2rem;justify-content:center;margin-top:1.3rem}
-.foot-links a{color:var(--text2);text-decoration:none;font-size:.82rem;transition:color .25s}
-.foot-links a:hover{color:var(--blue)}
-
-/* ═══════════ ANIMATIONS ═══════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
-.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.reveal.vis{opacity:1;transform:translateY(0)}
-
-/* ═══════════ RESPONSIVE ═══════════ */
-@media(max-width:768px){
-  body{cursor:auto}
-  .cursor,.cursor-dot,.cursor-glow{display:none!important}
-  .nav-links{display:none!important}
-  .mob-btn{display:block}
-  .nav-links.open{display:flex!important;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(4,4,14,.97);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border)}
-  nav{padding:.9rem 1.5rem}
-  .pgrid,.agrid,.rgrid,.tgrid{grid-template-columns:1fr}
-  section{padding:4.5rem 1.25rem}
-  .metrics .wrap{gap:2rem}
-  .flow-bar{gap:.4rem}
-  .terminal-body{font-size:.68rem;padding:1rem}
-}
+.book{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px) rotate(-1.2deg)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.book{animation:none}.page,.page.turned{transition:none}.shade{transition:none}}
 </style>
 </head>
 <body>
 
-<!-- Noise overlay -->
-<div class="noise"></div>
+<main class="book" id="book" aria-label="CiteBridge AI comic book">
 
-<!-- Custom cursor -->
-<div class="cursor-glow" id="cursorGlow"></div>
-<div class="cursor-dot" id="cursorDot"></div>
+<!-- COVER -->
+<article class="page" aria-label="Cover"><div class="front cover">
+  <div class="mast"><h1>CiteBridge<br>AI</h1><p>From AI citations to strategic partnerships</p></div>
+  <div class="sun">
+    <svg viewBox="0 0 400 270" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="0" y="212" width="400" height="58" fill="#1c4a9c" stroke="#16130f" stroke-width="4"/>
+      <path d="M0 232 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#bcd3ee" stroke-width="3"/>
+      <path d="M0 252 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#bcd3ee" stroke-width="3"/>
+      <path d="M-5 150 Q100 215 100 60 M100 60 Q200 190 300 60 M300 60 Q300 215 405 150" fill="none" stroke="#16130f" stroke-width="5" transform="translate(0,0)"/>
+      <path d="M100 60 Q200 200 300 60" fill="none" stroke="#16130f" stroke-width="5"/>
+      <g stroke="#16130f" stroke-width="2.5"><path d="M130 112V188M160 134V188M190 142V188M210 142V188M240 134V188M270 112V188"/></g>
+      <rect x="0" y="186" width="400" height="14" fill="#d62a1f" stroke="#16130f" stroke-width="4"/>
+      <rect x="86" y="30" width="28" height="182" fill="#f7c51e" stroke="#16130f" stroke-width="4"/>
+      <rect x="286" y="30" width="28" height="182" fill="#f7c51e" stroke="#16130f" stroke-width="4"/>
+      <rect x="82" y="24" width="36" height="12" fill="#16130f"/><rect x="282" y="24" width="36" height="12" fill="#16130f"/>
+    </svg>
+  </div>
+  <div class="foot"><div class="big">Six agents.<br>One room.</div><div class="issue">Issue<span>No. 1</span>Built with Switch AI</div></div>
+  <div class="hint">Click, swipe or press the right arrow to turn the page</div>
+  <div class="shade"></div>
+</div></article>
 
-<!-- Scroll progress -->
-<div class="scroll-progress" id="scrollProg"></div>
+<!-- 1 PROBLEM -->
+<article class="page" aria-label="Chapter one"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>one</span><h2>The Problem</h2></header>
+  <div><span class="cap">Customer discovery has moved to AI search. Two gaps remain open.</span></div>
+  <div class="grid g-prob">
+    <section class="panel dots"><div class="big" style="margin-bottom:1.2cqw">The AI visibility blindspot</div><p class="t">Startups can’t tell whether ChatGPT, Perplexity or Gemini recommend them, <b>which competitors dominate the answers</b>, or which blogs, newsletters and directories the models trust as sources.</p></section>
+    <section class="panel dots"><div class="big" style="margin-bottom:1.2cqw">The manual partnership grind</div><p class="t">Finding the right communities, newsletters and platforms, judging audience fit and writing tailored outreach <b>takes weeks of manual research</b>, even once a startup knows it needs distribution.</p></section>
+  </div>
+  <div class="shade"></div>
+</div></article>
 
-<!-- Three.js -->
-<canvas id="three-bg"></canvas>
-
-<!-- ════════════════════════ NAV ════════════════════════ -->
-<nav id="nav">
-  <div class="brand">⚡ CiteBridge AI</div>
-  <button class="mob-btn" id="mobBtn" aria-label="Menu">☰</button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#problem">Problem</a></li>
-    <li><a href="#solution">Solution</a></li>
-    <li><a href="#terminal">Workflow</a></li>
-    <li><a href="#pipeline">Agents</a></li>
-    <li><a href="#architecture">Architecture</a></li>
-    <li><a href="#techstack">Tech Stack</a></li>
-    <li><a href="https://github.com/KrishnaKapoor612/citebridge-switch-workflow" target="_blank" class="nav-cta">GitHub →</a></li>
-  </ul>
-</nav>
-
-<!-- ════════════════════════ HERO ════════════════════════ -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge"><span class="pulse-dot"></span>Built with Switch AI v0.40.1 · 6 Collaborative Agents</div>
-    <h1>Turn <span class="grad-blue">AI Citations</span><br>into <span class="grad-warm">Strategic Partnerships</span></h1>
-    <p class="hero-sub">CiteBridge AI discovers how AI search engines cite sources in your niche, extracts high-authority domains, scores partnership fit, and drafts data-backed outreach — all orchestrated through a live multi-agent chat room.</p>
-    <div class="hero-btns">
-      <a href="https://youtu.be/mc56j0S5aIk" target="_blank" class="btn btn-glow">▶ &nbsp;Watch Demo</a>
-      <a href="https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544" target="_blank" class="btn btn-warm">📝 &nbsp;Read the Blog</a>
-      <a href="https://github.com/KrishnaKapoor612/citebridge-switch-workflow" target="_blank" class="btn btn-glass">⭐ &nbsp;GitHub Repo</a>
+<!-- 2 SOLUTION -->
+<article class="page" aria-label="Chapter two"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>two</span><h2>The Bridge</h2></header>
+  <div class="grid g-sol">
+    <div><span class="cap">Monitoring tools stop at gaps. Contact lists stop at names. CiteBridge connects them.</span></div>
+    <section class="panel dots" style="display:flex;flex-direction:column;justify-content:center;gap:2cqw">
+      <p class="t" style="font-size:4cqw">Instead of chaining static prompts inside a black box, <b>Switch AI</b> turns local CLI coding and research agents into <b>live, stateful teammates in a multiplayer chat room</b>.</p>
+      <p class="t" style="font-size:4cqw">Humans and agents work side by side to find <b>who influences the AI’s answers</b>, then help founders partner with them.</p>
+    </section>
+    <div class="nums">
+      <div class="panel"><div class="big">6</div><div class="t">Agents</div></div>
+      <div class="panel"><div class="big">100</div><div class="t">Point rubric</div></div>
+      <div class="panel"><div class="big">90</div><div class="t">Day KPI tracking</div></div>
+      <div class="panel"><div class="big">1</div><div class="t">Shared room</div></div>
     </div>
   </div>
-  <div class="scroll-arrow"><span>Scroll</span><div class="scroll-arrow-icon"></div></div>
-</section>
+  <div class="shade"></div>
+</div></article>
 
-<!-- ════════════════════════ METRICS ════════════════════════ -->
-<div class="metrics">
-  <section>
-    <div class="wrap">
-      <div class="metric reveal"><div class="metric-num" data-count="6">0</div><div class="metric-label">AI Agents</div></div>
-      <div class="metric reveal"><div class="metric-num" data-count="100">0</div><div class="metric-label">Point Rubric</div></div>
-      <div class="metric reveal"><div class="metric-num" data-count="90">0</div><div class="metric-label">Day KPI Tracking</div></div>
-      <div class="metric reveal"><div class="metric-num" data-count="1">0</div><div class="metric-label">Shared Chat Room</div></div>
+<!-- 3 AGENTS -->
+<article class="page" aria-label="Chapter three"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>three</span><h2>The Team</h2></header>
+  <div class="grid g-ag">
+    <section class="panel ag"><h3>Search Intel<i>1</i></h3><div class="handle">@ai-search-intel</div><p class="t">Scans AI answers for target queries, maps visibility gaps and finds high-intent topics.</p></section>
+    <section class="panel ag"><h3>Citation Research<i>2</i></h3><div class="handle">@citation-researcher</div><p class="t">Extracts, sorts and verifies the exact URLs and domains the engines cite.</p></section>
+    <section class="panel ag"><h3>Partner Discovery<i>3</i></h3><div class="handle">@partner-discovery</div><p class="t">Turns verified sources into partner profiles with contacts, formats and angles.</p></section>
+    <section class="panel ag"><h3>Evaluator<i>4</i></h3><div class="handle">@partner-evaluator</div><p class="t">Ranks partners on a 100-point rubric: impact, relevance, authority, feasibility.</p></section>
+    <section class="panel ag"><h3>Outreach<i>5</i></h3><div class="handle">@outreach-generator</div><p class="t">Drafts personal, citation-backed pitches for the top-tier partners.</p></section>
+    <section class="panel ag"><h3>Growth Tracking<i>6</i></h3><div class="handle">@growth-tracking</div><p class="t">Tracks citation pickup and Share-of-Voice with 30/60/90-day scorecards.</p></section>
+  </div>
+  <div class="shade"></div>
+</div></article>
+
+<!-- 4 ROOM I -->
+<article class="page" aria-label="Chapter four, part one"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>four</span><h2>Inside the Room</h2></header>
+  <div class="talk">
+    <div class="row me"><span class="who">Founder</span><div class="bal"><span style="color:var(--blue);font-weight:700">@ai-search-intel</span> Analyze AI search visibility for “GlowVeda” in affordable clean skincare.</div></div>
+    <div class="row"><span class="who">Search Intel</span><div class="bal">Scanning ChatGPT, Perplexity and Gemini across 8 target queries. Found <b>14 competitor brands</b> and <b>52 third-party source URLs</b>.<span class="go">Handing off to @citation-researcher</span></div></div>
+    <div class="row"><span class="who">Citation Research</span><div class="bal">Audit done: <b>28 beauty blogs</b> by niche, <b>12 newsletters</b> with 50K+ subscribers, <b>6 product directories</b> verified.<span class="go">Handing off to @partner-discovery</span></div></div>
+    <div class="row"><span class="who">Partner Discovery</span><div class="bal"><b>9 co-marketing candidates</b> profiled, with editorial contacts and content formats mapped.<span class="go">Handing off to @partner-evaluator</span></div></div>
+    <div class="sfx">To be continued</div>
+  </div>
+  <div class="shade"></div>
+</div></article>
+
+<!-- 5 ROOM II -->
+<article class="page" aria-label="Chapter four, part two"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>four</span><h2>Inside the Room</h2></header>
+  <div class="talk">
+    <div class="row"><span class="who">Evaluator</span><div class="bal">Scored on the 100-point rubric: BeautyIndia Weekly <b>92</b>, SkincareCommunity.in <b>87</b>, GlowBox Subscription <b>84</b>. All Tier 1.<span class="go">Top 3 sent to @outreach-generator</span></div></div>
+    <div class="row"><span class="who">Outreach</span><div class="bal"><b>3 citation-backed emails</b> drafted for the Tier-1 partners. Waiting for founder approval before anything is sent.</div></div>
+    <div class="row me"><span class="who">Founder</span><div class="bal">Approved. Send all three.</div></div>
+    <div class="row"><span class="who">Growth Tracking</span><div class="bal">Share-of-Voice baseline captured across <b>8 query clusters</b>. The 30/60/90-day KPI scorecard is live.<span class="go">Re-check loop to @ai-search-intel in 7 days</span></div></div>
+    <div class="sfx">And the loop begins again</div>
+  </div>
+  <div class="shade"></div>
+</div></article>
+
+<!-- 6 ARCHITECTURE -->
+<article class="page" aria-label="Chapter five"><div class="front">
+  <header class="hd"><span class="ch">Chapter<br>five</span><h2>How It Works</h2></header>
+  <div><span class="cap">Switch AI bridges local agent sessions into one shared room.</span></div>
+  <section class="panel dots arch">
+    <svg viewBox="0 0 400 250" font-family="Barlow Condensed,sans-serif" font-weight="700" aria-label="Architecture diagram: local CLI agents connect through Switch AI to a Mattermost room shared with the founder; PostgreSQL stores state">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16130f"/></marker></defs>
+      <g fill="#fff" stroke="#16130f" stroke-width="3">
+        <rect x="8" y="20" width="108" height="64" fill="#f7c51e"/>
+        <rect x="146" y="20" width="108" height="64" fill="#d62a1f"/>
+        <rect x="284" y="20" width="108" height="64" fill="#1c4a9c"/>
+        <rect x="146" y="150" width="108" height="56"/>
+        <rect x="284" y="150" width="108" height="56"/>
+      </g>
+      <g stroke="#16130f" stroke-width="3" fill="none" marker-end="url(#ah)">
+        <path d="M118 52H142"/><path d="M256 52H280"/><path d="M338 88V146"/><path d="M200 88V146" marker-start="url(#ah)"/>
+      </g>
+      <g text-anchor="middle" font-size="16" fill="#16130f">
+        <text x="62" y="46">Local CLI</text><text x="62" y="64">agents</text>
+        <text x="200" y="46" fill="#fff">Switch AI</text><text x="200" y="64" fill="#fff" font-size="13">control plane</text>
+        <text x="338" y="46" fill="#fff">Mattermost</text><text x="338" y="64" fill="#fff" font-size="13">shared room</text>
+        <text x="200" y="174">PostgreSQL</text><text x="200" y="192" font-size="13">state store</text>
+        <text x="338" y="174">Founder</text><text x="338" y="192" font-size="13">steers live</text>
+        <text x="62" y="108" font-size="13">Claude Code, Codex, Cursor</text>
+        <text x="200" y="236" font-size="13">@mentions hand work from agent to agent</text>
+      </g>
+    </svg>
+  </section>
+  <section class="panel">
+    <div class="stack">
+      <div><b>Switch AI v0.40.1</b><span>Orchestrator and control plane</span></div>
+      <div><b>Mattermost v11.9.0</b><span>Team messaging via Docker</span></div>
+      <div><b>PostgreSQL</b><span>State store, port 51725</span></div>
+      <div><b>Docker and Compose</b><span>Containers, port 51724</span></div>
+      <div><b>Wispr Flow</b><span>Voice input for the founder</span></div>
+      <div><b>YAML and Markdown</b><span>Room config, agent briefs</span></div>
     </div>
   </section>
-</div>
+  <div class="shade"></div>
+</div></article>
 
-<!-- ════════════════════════ PROBLEM ════════════════════════ -->
-<section id="problem" class="problem-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">The Problem</span><h2 class="stitle">Two Disconnected Distribution Bottlenecks</h2><p class="sdesc">Customer discovery has shifted to AI search engines. Startups face two critical gaps that existing tools don't bridge.</p></div>
-    <div class="pgrid">
-      <div class="pcard reveal"><div class="pcard-glow"></div><div class="pcard-icon">🔍</div><h3>The AI Visibility Blindspot (GEO)</h3><p>Startups don't know if AI search engines like ChatGPT, Perplexity, or Gemini recommend them, which competitors dominate AI answers, or which third-party blogs, newsletters, and directories the AI models cite as trusted sources.</p></div>
-      <div class="pcard reveal"><div class="pcard-glow"></div><div class="pcard-icon">⏳</div><h3>Manual Partnership Bottlenecks</h3><p>Even when a startup knows it needs distribution, finding relevant communities, newsletters, and complementary platforms — evaluating their audience fit, and writing tailored outreach — takes weeks of manual research.</p></div>
+<!-- 7 BACK COVER -->
+<article class="page" aria-label="Back cover"><div class="front endp">
+  <div class="end">
+    <div class="big">Continue<br>the story</div>
+    <span class="cap">Three ways to go deeper</span>
+    <div class="links">
+      <a href="https://youtu.be/mc56j0S5aIk" target="_blank" rel="noopener"><strong>Video walkthrough</strong><span>The full workflow, from AI search analysis to outreach.</span></a>
+      <a href="https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544" target="_blank" rel="noopener"><strong>Technical deep dive</strong><span>How a six-agent growth team ended up living in a chat room.</span></a>
+      <a href="https://github.com/KrishnaKapoor612/citebridge-switch-workflow" target="_blank" rel="noopener"><strong>Source code</strong><span>Room templates, agent instructions and Switch AI config.</span></a>
     </div>
+    <div class="fin">The end</div>
   </div>
-</section>
+  <div class="shade"></div>
+</div></article>
 
-<!-- ════════════════════════ SOLUTION ════════════════════════ -->
-<section id="solution" class="solution-sec">
-  <div class="solution-orb o1"></div><div class="solution-orb o2"></div>
-  <div class="wrap">
-    <div class="reveal"><span class="label">The Solution</span><h2 class="stitle">CiteBridge Bridges the Gap</h2><p class="sdesc">Existing GEO tools only monitor visibility gaps. Partnership tools only list contacts. CiteBridge turns citations into executable partnership workflows.</p></div>
-    <div class="solution-box reveal"><p>Instead of chaining static prompts in a black box, <strong>Switch AI</strong> turns local CLI coding and research agents into <strong>live, stateful teammates inside a multiplayer chat room</strong> where humans and agents collaborate side by side — identifying <em>who</em> influences the AI's answers and helping founders partner with them.</p></div>
-  </div>
-</section>
+</main>
 
-<!-- ════════════════════════ TERMINAL ════════════════════════ -->
-<section id="terminal" class="terminal-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">Live Workflow</span><h2 class="stitle">Watch the Agents Collaborate</h2><p class="sdesc">This is what a real CiteBridge run looks like inside #citebridge-room — agents hand off work via @mentions, with the founder steering in real-time.</p></div>
-    <div class="terminal reveal" id="terminalBox">
-      <div class="terminal-bar"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span><span class="terminal-title">#citebridge-room — Mattermost (localhost:51724)</span></div>
-      <div class="terminal-body" id="termBody"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════ PIPELINE ════════════════════════ -->
-<section id="pipeline" class="pipeline-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">The 6-Agent Pipeline</span><h2 class="stitle">Agents as Teammates, Not Scripts</h2><p class="sdesc">Each agent is a specialist connected to the same Mattermost room. They collaborate via @mentions with human-in-the-loop steering at every step.</p></div>
-    <div class="agrid">
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">01</span><div class="abadge">@ai-search-intel</div><h3>AI Search Intelligence</h3><p>Scans AI search responses for target queries, maps brand visibility gaps, and identifies high-intent topic clusters.</p></div>
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">02</span><div class="abadge">@citation-researcher</div><h3>Citation Researcher</h3><p>Extracts, categorizes, and verifies the exact third-party URLs, publications, and domains cited by AI search engines.</p></div>
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">03</span><div class="abadge">@partner-discovery</div><h3>Partner Discovery</h3><p>Turns verified citation sources into actionable partner profiles, identifying editorial contacts, content formats, and collaboration angles.</p></div>
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">04</span><div class="abadge">@partner-evaluator</div><h3>Partner Evaluator</h3><p>Evaluates and ranks discovered partners using a weighted 100-point rubric covering Citation Impact, Relevance, Authority, and Feasibility.</p></div>
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">05</span><div class="abadge">@outreach-generator</div><h3>Outreach Generator</h3><p>Drafts personalized, citation-backed outreach emails and collaboration pitches for the highest-scoring Tier-1 partners.</p></div>
-      <div class="acard reveal"><div class="acard-glow"></div><span class="num">06</span><div class="abadge">@growth-tracking</div><h3>Growth Tracking</h3><p>Monitors post-outreach citation pickup, tracks AI Share-of-Voice (SoV) growth, and builds 30/60/90-day KPI scorecards.</p></div>
-    </div>
-    <div class="flow-bar reveal">
-      <span class="flow-node">@ai-search-intel</span><span class="flow-arrow">→</span>
-      <span class="flow-node">@citation-researcher</span><span class="flow-arrow">→</span>
-      <span class="flow-node">@partner-discovery</span><span class="flow-arrow">→</span>
-      <span class="flow-node">@partner-evaluator</span><span class="flow-arrow">→</span>
-      <span class="flow-node">@outreach-generator</span><span class="flow-arrow">→</span>
-      <span class="flow-node">@growth-tracking</span><span class="flow-arrow">↻</span>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════ ARCHITECTURE ════════════════════════ -->
-<section id="architecture" class="arch-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">Architecture</span><h2 class="stitle">How the Room Works</h2><p class="sdesc">Switch AI bridges local CLI agent sessions into a shared Mattermost room, enabling zero-glue-code handoffs and real-time human steering.</p></div>
-    <div class="arch-frame reveal"><img src="../citebridge-architecture.png" alt="CiteBridge AI Architecture"></div>
-  </div>
-</section>
-
-<!-- ════════════════════════ TECH STACK ════════════════════════ -->
-<section id="techstack" class="tech-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">Tech Stack</span><h2 class="stitle">Built With</h2></div>
-    <div class="tgrid">
-      <div class="tcard reveal"><div class="tcard-icon">⚡</div><div><h4>Switch AI (v0.40.1)</h4><p>Multi-agent orchestrator &amp; local control plane</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">💬</div><div><h4>Mattermost (v11.9.0)</h4><p>Team messaging bridge via local Docker</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">🐘</div><div><h4>PostgreSQL</h4><p>Relational state store (Port 51725)</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">🤖</div><div><h4>Claude Code / Codex / Cursor</h4><p>Local CLI agent engines</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">🎙️</div><div><h4>Wispr Flow</h4><p>Voice-to-text human-in-the-loop input</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">🐳</div><div><h4>Docker &amp; Docker Compose</h4><p>Container orchestration (Port 51724)</p></div></div>
-      <div class="tcard reveal"><div class="tcard-icon">📄</div><div><h4>YAML &amp; Markdown</h4><p>Declarative room config &amp; agent instructions</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════ RESOURCES ════════════════════════ -->
-<section id="resources" class="res-sec">
-  <div class="wrap">
-    <div class="reveal"><span class="label">Resources</span><h2 class="stitle">Dive Deeper</h2></div>
-    <div class="rgrid">
-      <div class="rcard reveal"><div class="ri">🎬</div><h3>Video Walkthrough</h3><p>Watch the full CiteBridge AI workflow in action — from AI search analysis to outreach generation.</p><a href="https://youtu.be/mc56j0S5aIk" target="_blank" class="btn btn-glow">Watch on YouTube →</a></div>
-      <div class="rcard reveal"><div class="ri">📝</div><h3>Technical Deep Dive</h3><p>Read how we built a six-agent startup growth team that lives in a chat room — agents as teammates, not pipelines.</p><a href="https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544" target="_blank" class="btn btn-warm">Read on Medium →</a></div>
-      <div class="rcard reveal"><div class="ri">💻</div><h3>Source Code</h3><p>Explore the repository — room templates, agent instructions, and the full Switch AI configuration.</p><a href="https://github.com/KrishnaKapoor612/citebridge-switch-workflow" target="_blank" class="btn btn-glass">View on GitHub →</a></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════ FOOTER ════════════════════════ -->
-<footer>
-  <div class="foot-brand">⚡ CiteBridge AI</div>
-  <p>6-Agent Collaborative System · Built with Switch AI</p>
-  <div class="foot-links">
-    <a href="https://github.com/KrishnaKapoor612/citebridge-switch-workflow" target="_blank">GitHub</a>
-    <a href="https://youtu.be/mc56j0S5aIk" target="_blank">Demo</a>
-    <a href="https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544" target="_blank">Blog</a>
-  </div>
-</footer>
+<nav class="ctl" aria-label="Page controls">
+  <button id="prev" type="button">Prev</button>
+  <output id="pos" aria-live="polite">1 / 8</output>
+  <button id="next" type="button">Next</button>
+</nav>
 
 <script>
-/* ═══════════════════════════════════════════════
-   1. CUSTOM CURSOR
-   ═══════════════════════════════════════════════ */
-const dot = document.getElementById('cursorDot');
-const glow = document.getElementById('cursorGlow');
-let mx = 0, my = 0, dx = 0, dy = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function animCursor() {
-  dx += (mx - dx) * 0.15;
-  dy += (my - dy) * 0.15;
-  dot.style.left = mx + 'px';
-  dot.style.top = my + 'px';
-  dot.style.transform = 'translate(-50%,-50%)';
-  glow.style.left = dx + 'px';
-  glow.style.top = dy + 'px';
-  requestAnimationFrame(animCursor);
-}
-animCursor();
-
-/* Cursor scale on interactive elements */
-document.querySelectorAll('a, button, .acard, .pcard, .rcard, .tcard').forEach(el => {
-  el.addEventListener('mouseenter', () => dot.style.transform = 'translate(-50%,-50%) scale(2.5)');
-  el.addEventListener('mouseleave', () => dot.style.transform = 'translate(-50%,-50%) scale(1)');
-});
-
-/* ═══════════════════════════════════════════════
-   2. NAV + SCROLL PROGRESS
-   ═══════════════════════════════════════════════ */
-const nav = document.getElementById('nav');
-const prog = document.getElementById('scrollProg');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', scrollY > 60);
-  const h = document.documentElement.scrollHeight - innerHeight;
-  prog.style.width = (scrollY / h * 100) + '%';
-});
-document.getElementById('mobBtn').addEventListener('click', () => document.getElementById('navLinks').classList.toggle('open'));
-
-/* ═══════════════════════════════════════════════
-   3. SCROLL REVEAL + COUNTER
-   ═══════════════════════════════════════════════ */
-const revealIO = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      const delay = Array.from(e.target.parentElement.children).indexOf(e.target);
-      setTimeout(() => e.target.classList.add('vis'), delay * 100);
-      revealIO.unobserve(e.target);
-
-      /* counter animation */
-      const counter = e.target.querySelector('[data-count]');
-      if (counter) {
-        const target = +counter.dataset.count;
-        let current = 0;
-        const step = Math.max(1, Math.floor(target / 40));
-        const iv = setInterval(() => {
-          current += step;
-          if (current >= target) { current = target; clearInterval(iv); }
-          counter.textContent = current;
-        }, 30);
-      }
-    }
-  });
-}, { threshold: 0.15 });
-document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
-
-/* ═══════════════════════════════════════════════
-   4. 3D TILT ON AGENT CARDS
-   ═══════════════════════════════════════════════ */
-document.querySelectorAll('.acard').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    card.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateY(-4px)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = 'perspective(800px) rotateY(0) rotateX(0) translateY(0)';
-  });
-});
-
-/* ═══════════════════════════════════════════════
-   5. ANIMATED TERMINAL
-   ═══════════════════════════════════════════════ */
-const termLines = [
-  { html: '<span class="user-cmd">[user]</span> <span class="dim">@ai-search-intel</span> Analyze AI search visibility for "GlowVeda" in Affordable Clean Skincare...', delay: 0 },
-  { html: '', delay: 400 },
-  { html: '<span class="agent">[ai-search-intel]</span> Scanning ChatGPT, Perplexity, Gemini for 8 target queries...', delay: 600 },
-  { html: '  <span class="success">✓</span> Found <span class="highlight">14 competitor brands</span> cited across AI answers', delay: 400 },
-  { html: '  <span class="success">✓</span> Extracted <span class="highlight">52 third-party source URLs</span>', delay: 350 },
-  { html: '  <span class="handoff">→ Handing off to @citation-researcher</span>', delay: 500 },
-  { html: '', delay: 300 },
-  { html: '<span class="agent">[citation-researcher]</span> Auditing 52 extracted sources...', delay: 500 },
-  { html: '  <span class="success">✓</span> 28 beauty blogs categorized by niche', delay: 350 },
-  { html: '  <span class="success">✓</span> 12 newsletters with 50K+ subscribers identified', delay: 350 },
-  { html: '  <span class="success">✓</span> 6 product directories verified', delay: 300 },
-  { html: '  <span class="handoff">→ Handing off to @partner-discovery</span>', delay: 500 },
-  { html: '', delay: 300 },
-  { html: '<span class="agent">[partner-discovery]</span> Building partner profiles...', delay: 500 },
-  { html: '  <span class="success">✓</span> 9 co-marketing candidates profiled', delay: 400 },
-  { html: '  <span class="success">✓</span> Editorial contacts & content formats mapped', delay: 350 },
-  { html: '  <span class="handoff">→ Handing off to @partner-evaluator</span>', delay: 500 },
-  { html: '', delay: 300 },
-  { html: '<span class="agent">[partner-evaluator]</span> Scoring with 100-point rubric...', delay: 500 },
-  { html: '  <span class="success">✓</span> BeautyIndia Weekly — <span class="highlight">Score: 92/100</span> (Tier 1)', delay: 400 },
-  { html: '  <span class="success">✓</span> SkincareCommunity.in — <span class="highlight">Score: 87/100</span> (Tier 1)', delay: 350 },
-  { html: '  <span class="success">✓</span> GlowBox Subscription — <span class="highlight">Score: 84/100</span> (Tier 1)', delay: 350 },
-  { html: '  <span class="handoff">→ Top 3 partners sent to @outreach-generator</span>', delay: 500 },
-  { html: '', delay: 300 },
-  { html: '<span class="agent">[outreach-generator]</span> Drafting personalized pitches for Tier-1 partners...', delay: 500 },
-  { html: '  <span class="success">✓</span> 3 citation-backed outreach emails generated', delay: 400 },
-  { html: '  <span class="handoff">⏳ Waiting for <span class="user-cmd">[user]</span> approval before sending...</span>', delay: 600 },
-  { html: '', delay: 400 },
-  { html: '<span class="user-cmd">[user]</span> <span class="success">✅ Approved — send all three.</span>', delay: 600 },
-  { html: '', delay: 300 },
-  { html: '<span class="agent">[growth-tracking]</span> Monitoring post-outreach citation pickup...', delay: 500 },
-  { html: '  <span class="success">✓</span> Share-of-Voice baseline captured across 8 query clusters', delay: 400 },
-  { html: '  <span class="success">✓</span> 30/60/90-day KPI scorecard initialized', delay: 350 },
-  { html: '  <span class="dim">↻ Scheduled re-check loop → @ai-search-intel in 7 days</span>', delay: 500 },
-];
-
-let termStarted = false;
-const termBody = document.getElementById('termBody');
-const termBox = document.getElementById('terminalBox');
-const termIO = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !termStarted) {
-    termStarted = true;
-    runTerminal();
-    termIO.unobserve(termBox);
-  }
-}, { threshold: 0.3 });
-termIO.observe(termBox);
-
-function runTerminal() {
-  termBody.innerHTML = '';
-  let totalDelay = 0;
-  termLines.forEach((l, i) => {
-    totalDelay += l.delay;
-    setTimeout(() => {
-      const div = document.createElement('div');
-      div.className = 'line';
-      div.innerHTML = l.html || '&nbsp;';
-      termBody.appendChild(div);
-      requestAnimationFrame(() => div.classList.add('show'));
-      termBody.scrollTop = termBody.scrollHeight;
-    }, totalDelay);
-  });
-  /* loop */
-  setTimeout(() => { termStarted = false; runTerminal(); }, totalDelay + 4000);
-}
-
-/* ═══════════════════════════════════════════════
-   6. THREE.JS — IMMERSIVE NETWORK SCENE
-   ═══════════════════════════════════════════════ */
-(function() {
-  const canvas = document.getElementById('three-bg');
-  const W = () => innerWidth, H = () => innerHeight;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(W(), H());
-
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x04040e, 0.008);
-
-  const camera = new THREE.PerspectiveCamera(62, W() / H(), 0.1, 600);
-  camera.position.set(0, 0, 52);
-
-  /* ── colors ── */
-  const C = [0x3b82f6, 0x06b6d4, 0x7c3aed, 0xf59e0b, 0x10b981, 0xf43f5e, 0xeef2ff];
-
-  /* ── node positions (flow layout) ── */
-  const NP = [
-    new THREE.Vector3(-22, 8, 0),
-    new THREE.Vector3(-13, -4, 6),
-    new THREE.Vector3(-3, 7, -4),
-    new THREE.Vector3(7, -5, 5),
-    new THREE.Vector3(17, 6, -2),
-    new THREE.Vector3(27, -2, 4),
-    new THREE.Vector3(0, -14, 10) /* founder */
-  ];
-
-  /* ── build nodes with layered glow ── */
-  const nodes = [];
-  NP.forEach((pos, i) => {
-    const isFounder = i === 6;
-    const group = new THREE.Group();
-    group.position.copy(pos);
-
-    /* core */
-    const core = new THREE.Mesh(
-      new THREE.SphereGeometry(isFounder ? 0.6 : 0.45, 32, 32),
-      new THREE.MeshBasicMaterial({ color: C[i] })
-    );
-    group.add(core);
-
-    /* inner glow */
-    const ig = new THREE.Mesh(
-      new THREE.SphereGeometry(isFounder ? 1.4 : 1.0, 32, 32),
-      new THREE.MeshBasicMaterial({ color: C[i], transparent: true, opacity: 0.15 })
-    );
-    group.add(ig);
-
-    /* outer glow */
-    const og = new THREE.Mesh(
-      new THREE.SphereGeometry(isFounder ? 2.8 : 2.0, 32, 32),
-      new THREE.MeshBasicMaterial({ color: C[i], transparent: true, opacity: 0.04 })
-    );
-    group.add(og);
-
-    /* ring */
-    const ring = new THREE.Mesh(
-      new THREE.RingGeometry(isFounder ? 1.6 : 1.2, isFounder ? 1.75 : 1.3, 48),
-      new THREE.MeshBasicMaterial({ color: C[i], transparent: true, opacity: 0.1, side: THREE.DoubleSide })
-    );
-    group.add(ring);
-    ring.userData = { speed: 0.3 + Math.random() * 0.5 };
-
-    scene.add(group);
-    nodes.push({ group, core, ring, basePos: pos.clone() });
-  });
-
-  /* ── curved connections with tubes ── */
-  const conns = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[6,0],[6,4],[6,2]];
-  const curves = [];
-  conns.forEach(([a, b]) => {
-    const mid = NP[a].clone().add(NP[b]).multiplyScalar(0.5);
-    mid.y += (Math.random() - 0.5) * 6;
-    mid.z += (Math.random() - 0.5) * 8;
-    const curve = new THREE.QuadraticBezierCurve3(NP[a], mid, NP[b]);
-    curves.push({ curve, a, b });
-
-    /* thin line */
-    const pts = curve.getPoints(60);
-    const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    const mat = new THREE.LineBasicMaterial({ color: C[a], transparent: true, opacity: 0.06 });
-    scene.add(new THREE.Line(geo, mat));
-  });
-
-  /* ── travelling pulses along curves ── */
-  const pulses = [];
-  curves.forEach(({ curve, a, b }, idx) => {
-    const count = 2 + Math.floor(Math.random() * 2);
-    for (let i = 0; i < count; i++) {
-      const geo = new THREE.SphereGeometry(0.12 + Math.random() * 0.08, 8, 8);
-      const mat = new THREE.MeshBasicMaterial({ color: C[a], transparent: true, opacity: 0 });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.userData = { curve, t: Math.random(), speed: 0.001 + Math.random() * 0.003 };
-      scene.add(mesh);
-      pulses.push(mesh);
-    }
-  });
-
-  /* ── ambient starfield ── */
-  const STAR_COUNT = 3000;
-  const sPos = new Float32Array(STAR_COUNT * 3);
-  const sSizes = new Float32Array(STAR_COUNT);
-  for (let i = 0; i < STAR_COUNT; i++) {
-    sPos[i*3]   = (Math.random() - 0.5) * 200;
-    sPos[i*3+1] = (Math.random() - 0.5) * 140;
-    sPos[i*3+2] = (Math.random() - 0.5) * 120 - 20;
-    sSizes[i]   = Math.random() * 1.5 + 0.3;
-  }
-  const sGeo = new THREE.BufferGeometry();
-  sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
-  sGeo.setAttribute('size', new THREE.BufferAttribute(sSizes, 1));
-  const sMat = new THREE.PointsMaterial({ color: 0x6688cc, size: 0.15, transparent: true, opacity: 0.5, sizeAttenuation: true });
-  const stars = new THREE.Points(sGeo, sMat);
-  scene.add(stars);
-
-  /* ── second particle layer (brighter, fewer) ── */
-  const BRIGHT_COUNT = 400;
-  const bPos = new Float32Array(BRIGHT_COUNT * 3);
-  const bVel = [];
-  for (let i = 0; i < BRIGHT_COUNT; i++) {
-    bPos[i*3]   = (Math.random() - 0.5) * 100;
-    bPos[i*3+1] = (Math.random() - 0.5) * 70;
-    bPos[i*3+2] = (Math.random() - 0.5) * 50;
-    bVel.push(new THREE.Vector3(
-      (Math.random() - 0.5) * 0.012,
-      (Math.random() - 0.5) * 0.01,
-      (Math.random() - 0.5) * 0.008
-    ));
-  }
-  const bGeo = new THREE.BufferGeometry();
-  bGeo.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
-  const bMat = new THREE.PointsMaterial({ color: 0x88aaff, size: 0.25, transparent: true, opacity: 0.7, sizeAttenuation: true });
-  const brightPts = new THREE.Points(bGeo, bMat);
-  scene.add(brightPts);
-
-  /* ── grid floor ── */
-  const gridGeo = new THREE.PlaneGeometry(200, 200, 40, 40);
-  const gridMat = new THREE.MeshBasicMaterial({ color: 0x1a1a4e, wireframe: true, transparent: true, opacity: 0.04 });
-  const grid = new THREE.Mesh(gridGeo, gridMat);
-  grid.rotation.x = -Math.PI / 2;
-  grid.position.y = -25;
-  scene.add(grid);
-
-  /* ── mouse + scroll ── */
-  const mouse = { x: 0, y: 0 };
-  document.addEventListener('mousemove', e => {
-    mouse.x = (e.clientX / W() - 0.5) * 2;
-    mouse.y = (e.clientY / H() - 0.5) * 2;
-  });
-
-  function scrollFade() {
-    const s = scrollY;
-    const a = H() * 0.25, b = H() * 1.5;
-    if (s < a) return 1;
-    if (s > b) return 0.04;
-    return 1 - ((s - a) / (b - a)) * 0.96;
-  }
-
-  /* ── resize ── */
-  window.addEventListener('resize', () => {
-    camera.aspect = W() / H();
-    camera.updateProjectionMatrix();
-    renderer.setSize(W(), H());
-  });
-
-  /* ── render loop ── */
-  const clock = new THREE.Clock();
-  (function animate() {
-    requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-
-    /* camera follow mouse with scroll-linked zoom */
-    const targetZ = 52 + scrollY * 0.008;
-    camera.position.x += (mouse.x * 6 - camera.position.x) * 0.025;
-    camera.position.y += (-mouse.y * 4 - camera.position.y) * 0.025;
-    camera.position.z += (targetZ - camera.position.z) * 0.03;
-    camera.lookAt(0, 0, 0);
-
-    /* bob nodes */
-    nodes.forEach((n, i) => {
-      n.group.position.y = n.basePos.y + Math.sin(t * 0.6 + i * 1.2) * 1.5;
-      n.group.position.x = n.basePos.x + Math.cos(t * 0.4 + i * 0.9) * 0.8;
-      n.ring.rotation.x = t * n.ring.userData.speed;
-      n.ring.rotation.y = t * n.ring.userData.speed * 0.7;
-      n.core.material.opacity = 0.8 + Math.sin(t * 2 + i) * 0.2;
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('.page')),n=pages.length,cur=0;
+  var prev=document.getElementById('prev'),next=document.getElementById('next'),pos=document.getElementById('pos');
+  pages.forEach(function(p,i){
+    p.style.zIndex=n-i;
+    var b=document.createElement('div');b.className='back';p.appendChild(b);
+    p.addEventListener('click',function(e){
+      if(e.target.closest('a'))return;
+      var r=p.getBoundingClientRect();go(e.clientX-r.left>r.width*.4?1:-1);
     });
-
-    /* pulse along curves */
-    pulses.forEach(p => {
-      p.userData.t += p.userData.speed;
-      if (p.userData.t > 1) p.userData.t = 0;
-      const pt = p.userData.curve.getPoint(p.userData.t);
-      p.position.copy(pt);
-      p.material.opacity = 0.5 + Math.sin(p.userData.t * Math.PI) * 0.5;
-    });
-
-    /* animate bright particles */
-    const bArr = brightPts.geometry.attributes.position.array;
-    for (let i = 0; i < BRIGHT_COUNT; i++) {
-      bArr[i*3]   += bVel[i].x;
-      bArr[i*3+1] += bVel[i].y;
-      bArr[i*3+2] += bVel[i].z;
-      if (Math.abs(bArr[i*3]) > 50)   bVel[i].x *= -1;
-      if (Math.abs(bArr[i*3+1]) > 35) bVel[i].y *= -1;
-      if (Math.abs(bArr[i*3+2]) > 25) bVel[i].z *= -1;
-    }
-    brightPts.geometry.attributes.position.needsUpdate = true;
-
-    /* slow starfield drift */
-    stars.rotation.y = t * 0.005;
-    stars.rotation.x = t * 0.002;
-
-    /* grid pulse */
-    grid.material.opacity = 0.03 + Math.sin(t * 0.5) * 0.015;
-
-    /* canvas fade on scroll */
-    canvas.style.opacity = scrollFade();
-
-    renderer.render(scene, camera);
-  })();
+  });
+  function render(){
+    pages.forEach(function(p,i){p.classList.toggle('turned',i<cur);p.classList.toggle('up',i===cur+1);});
+    prev.disabled=cur===0;next.disabled=cur===n-1;pos.textContent=(cur+1)+' / '+n;
+  }
+  function go(d){var t=cur+d;if(t<0||t>=n)return;cur=t;render();}
+  prev.addEventListener('click',function(){go(-1)});
+  next.addEventListener('click',function(){go(1)});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')go(1);
+    else if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1);
+    else if(e.key==='Home'){cur=0;render();}
+    else if(e.key==='End'){cur=n-1;render();}
+  });
+  var sx=null;
+  document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;
+    if(Math.abs(dx)>45)go(dx<0?1:-1);
+  },{passive:true});
+  render();
 })();
 </script>
 </body>
