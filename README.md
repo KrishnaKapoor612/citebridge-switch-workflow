@@ -15,6 +15,7 @@ Traditional automation pipelines chain static prompts together in a black box—
 
 - 🎥 **Video Demo:** [Watch CiteBridge in Action on YouTube](https://youtu.be/mc56j0S5aIk)
 - 📝 **Technical Blog:** [Agents as Teammates, Not Pipelines (Medium)](https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544)
+- 🌐 **Interactive 3D Showcase:** Explore [`landing/index.html`](landing/index.html) for an immersive Three.js visualization of the CiteBridge multi-agent network, live terminal simulation, and architecture.
 - 📚 **Documentation Reference Links:**
   - [Switch AI Documentation](https://docs.switch.ai) — Multi-agent local orchestration & room protocols
   - [Mattermost Team Edition Documentation](https://docs.mattermost.com) — Collaboration and webhook architecture
@@ -34,6 +35,7 @@ Traditional automation pipelines chain static prompts together in a black box—
 | **Human-in-the-Loop Input** | **Wispr Flow** | Voice-to-text dictation enabling real-time human founder steering in channel |
 | **Container Infrastructure** | **Docker** & **Docker Compose** | Local orchestration for `switchdash-local-mattermost-mattermost-1` mapped to `127.0.0.1:51724` |
 | **Declarative Config** | **YAML & Markdown** | Declarative room parameters (`templates/citebridge-room.yaml`) and role instructions (`AGENTS.md`) |
+| **Interactive 3D Showcase** | **Three.js (r128), HTML5, Canvas** | Standalone immersive 3D landing page with real-time agent network simulation & live terminal preview (`landing/index.html`) |
 
 ---
 
@@ -52,6 +54,7 @@ Traditional automation pipelines chain static prompts together in a black box—
   - [Startup Prompt in Channel](#startup-prompt-in-channel)
 - [5. Repository Structure](#5-repository-structure)
 - [6. How to Run It Locally](#6-how-to-run-it-locally)
+  - [Preview the 3D Interactive Landing Page (Optional)](#preview-the-3d-interactive-landing-page-optional)
   - [Step 1: Clone the Repository](#step-1-clone-the-repository)
   - [Step 2: Configure an Agent Provider in Switch Console](#step-2-configure-an-agent-provider-in-switch-console)
   - [Step 3: Onboard the 6 Agents Locally](#step-3-onboard-the-6-agents-locally)
@@ -212,6 +215,8 @@ Our Switch Room template defines the workspace using standard `params` and `room
 citebridge-switch-workflow/
 ├── README.md                        # Project overview, Switch AI architecture, and local setup guide
 ├── citebridge-architecture.png      # Workflow and room interaction architecture diagram
+├── landing/                         # Immersive Three.js 3D landing page & showcase
+│   └── index.html                   # Standalone landing page with network particle simulation
 ├── templates/
 │   └── citebridge-room.yaml         # Switch Room configuration 
 └── agents/                          # Local working directories mapped in Switch Console
@@ -232,6 +237,20 @@ citebridge-switch-workflow/
 ## 6. How to Run It Locally
 
 Follow these steps to reproduce and run the CiteBridge 6-agent room on your own machine using **Switch Console**:
+
+### Preview the 3D Interactive Landing Page (Optional)
+
+You can launch the immersive Three.js landing page with any static server or directly in your browser:
+
+```bash
+# Option A: With Python
+cd landing
+python -m http.server 3000
+# Open http://localhost:3000 in your browser
+
+# Option B: Direct Open
+# Double-click landing/index.html or open it directly in Chrome / Edge / Firefox
+```
 
 ### Step 1: Clone the Repository
 
