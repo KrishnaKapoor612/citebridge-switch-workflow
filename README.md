@@ -1,16 +1,71 @@
 # CiteBridge — Multi-Agent AI Citation, Partner Outreach & Growth Tracking Workflow on Switch AI
 
+[![Demo Video](https://img.shields.io/badge/Demo-Video%20Walkthrough-red?style=for-the-badge&logo=youtube)](https://youtu.be/mc56j0S5aIk)
+[![Technical Blog](https://img.shields.io/badge/Technical%20Blog-Medium-black?style=for-the-badge&logo=medium)](https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544)
+[![Switch AI Version](https://img.shields.io/badge/Switch%20AI-v0.40.1-blue?style=for-the-badge)](https://docs.switch.ai)
+[![Mattermost](https://img.shields.io/badge/Mattermost-Local%20Docker-blue?style=for-the-badge&logo=mattermost)](https://docs.mattermost.com)
+
 **CiteBridge** is a 6-agent collaborative system built with **Switch AI (`v0.40.1`)** running locally on **Switch Console** and connected to a **Mattermost** workspace. It brings AI agents into a shared team channel to discover how AI search engines cite sources in a target niche, extract high-authority citation domains, identify strategic partnership targets, score their fit, generate data-backed outreach campaigns, and track post-outreach citation growth.
 
 Traditional automation pipelines chain static prompts together in a black box—if an early step drifts or needs human judgment, the entire run fails. **Switch AI** fundamentally changes this by turning local CLI coding and research agents into **live, stateful teammates inside a multiplayer chat room** where humans and agents collaborate side by side.
 
+---
+
+### Quick Links & Documentation
+
+- 🎥 **Video Demo:** [Watch CiteBridge in Action on YouTube](https://youtu.be/mc56j0S5aIk)
+- 📝 **Technical Blog:** [Agents as Teammates, Not Pipelines (Medium)](https://medium.com/@krishnakapoor1469/agents-as-teammates-not-pipelines-we-built-a-six-agent-startup-growth-team-that-lives-in-cb93626cd544)
+- 📚 **Documentation Reference Links:**
+  - [Switch AI Documentation](https://docs.switch.ai) — Multi-agent local orchestration & room protocols
+  - [Mattermost Team Edition Documentation](https://docs.mattermost.com) — Collaboration and webhook architecture
+  - [Docker Documentation](https://docs.docker.com) — Container lifecycle & port mapping
+  - [Wispr Flow](https://wisprflow.ai) — Low-latency voice dictation for human-in-the-loop steering
+
+---
+
+### Tech Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Multi-Agent Orchestrator** | **Switch AI (`v0.40.1`)** / **Switch Console** | Local agent control plane, directory isolation, auto-mode execution & cross-agent `@mention` coordination |
+| **Team Messaging Bridge** | **Mattermost Team Edition (`11.9.0`)** | Shared collaboration room (`#citebridge-room`) provisioned locally via Docker |
+| **Database** | **PostgreSQL** | Relational state store for local Mattermost instance (`Port 51725`) |
+| **Local CLI Agent Engines** | **Claude Code**, **Codex**, **Cursor**, **Antigravity**, **OpenCode** | Local CLI coding & research agents mapped to dedicated agent workspaces (`agents/<agent-name>/`) |
+| **Human-in-the-Loop Input** | **Wispr Flow** | Voice-to-text dictation enabling real-time human founder steering in channel |
+| **Container Infrastructure** | **Docker** & **Docker Compose** | Local orchestration for `switchdash-local-mattermost-mattermost-1` mapped to `127.0.0.1:51724` |
+| **Declarative Config** | **YAML & Markdown** | Declarative room parameters (`templates/citebridge-room.yaml`) and role instructions (`AGENTS.md`) |
+
+---
+
+### Table of Contents
+
+- [1. How We Used Switch AI](#1-how-we-used-switch-ai)
+  - [Project Overview: From AI Search Signals to Strategic Partnerships](#project-overview-from-ai-search-signals-to-strategic-partnerships)
+    - [1. The Story & The Problem We Are Solving](#1-the-story--the-problem-we-are-solving)
+    - [2. The Architecture & Where Switch AI Fits In](#2-the-architecture--where-switch-ai-fits-in)
+    - [3. Why Switch AI is the Backbone of CiteBridge AI](#3-why-switch-ai-is-the-backbone-of-citebridge-ai)
+- [2. Which Agents We Connected](#2-which-agents-we-connected)
+- [3. How the Channel & Switch Room Are Set Up](#3-how-the-channel--switch-room-are-set-up)
+  - [Messaging Channel & Local Docker Setup](#messaging-channel--local-docker-setup)
+  - [Switch Room Configuration (`templates/citebridge-room.yaml`)](#switch-room-configuration-templatescitebridge-roomyaml)
+- [4. Example Workflow Run](#4-example-workflow-run)
+  - [Startup Prompt in Channel](#startup-prompt-in-channel)
+- [5. Repository Structure](#5-repository-structure)
+- [6. How to Run It Locally](#6-how-to-run-it-locally)
+  - [Step 1: Clone the Repository](#step-1-clone-the-repository)
+  - [Step 2: Configure an Agent Provider in Switch Console](#step-2-configure-an-agent-provider-in-switch-console)
+  - [Step 3: Onboard the 6 Agents Locally](#step-3-onboard-the-6-agents-locally)
+  - [Step 4: Connect Your Channel & Configure the Room](#step-4-connect-your-channel--configure-the-room)
+  - [Step 5: Start Collaborating in the Room](#step-5-start-collaborating-in-the-room)
+
+---
 
 ## 1. How We Used Switch AI
 
-* **Bridging Local CLI Agents into a Shared Team Channel:** Using **Switch Console** (`Run location: This computer`), we connected six local agent workspaces (`agents/<agent-name>/`) powered by local agent CLI providers (`Claude Code`/ `Codex`/`Cursor`/ `Antigravity` /`OpenCode`) directly into a live Mattermost channel. Each agent maintains its own local directory context and session state while conversing in the same room as our human team.
-* **Dynamic Multi-Agent Delegation & Human-in-the-Loop Steering [Not Just a Linear Script]:** By configuring Switch's permission boundary (`Who can talk to your agent: Me and my agents`) alongside **`Auto mode`**, agents do more than just fire sequential triggers—they actively collaborate in the room. Agents pass structured findings to one another, request follow-up verification from peer agents (such as `@ai-search-intel` gathers market data, `@citation-researcher` verifies documentation claims, `@partner-evaluator` scores technical fit, `@outreach-generator` deploys tailored campaigns, and `@growth-tracking` analyzes performance metrics), and allow `Human Operators` in the channel to jump in at any point to challenge a score, refine a target niche, Vetoing a Partner or redirect outreach mid-flight.
-* Instead of writing custom scripts or complex integration code, we used Switch AI to connect our six local CLI agents (`ai-search-intel`, `citation-researcher`, `partner-discovery`, `partner-evaluator`, `outreach-generator`, and `growth-tracking`) into a shared chat room. By configuring each agent's **Name**, **Description**, and **Agent Instructions** directly in the Switch Console, the agents can naturally read messages, collaborate, and hand off tasks to one another using `@mentions`. 
-* **Local Execution Governance & Session Control:** Switch Console manages agent sessions, directory isolation, and execution safety (`Auto mode` runs safe research and drafting autonomously while protecting the host system), giving us a production-ready multi-agent control plane without building custom orchestration infrastructure.
+- **Bridging Local CLI Agents into a Shared Team Channel:** Using **Switch Console** (`Run location: This computer`), we connected six local agent workspaces (`agents/<agent-name>/`) powered by local agent CLI providers (`Claude Code`/ `Codex`/`Cursor`/ `Antigravity` /`OpenCode`) directly into a live Mattermost channel. Each agent maintains its own local directory context and session state while conversing in the same room as our human team.
+- **Dynamic Multi-Agent Delegation & Human-in-the-Loop Steering [Not Just a Linear Script]:** By configuring Switch's permission boundary (`Who can talk to your agent: Me and my agents`) alongside **`Auto mode`**, agents do more than just fire sequential triggers—they actively collaborate in the room. Agents pass structured findings to one another, request follow-up verification from peer agents (such as `@ai-search-intel` gathers market data, `@citation-researcher` verifies documentation claims, `@partner-evaluator` scores technical fit, `@outreach-generator` deploys tailored campaigns, and `@growth-tracking` analyzes performance metrics), and allow `Human Operators` in the channel to jump in at any point to challenge a score, refine a target niche, Vetoing a Partner or redirect outreach mid-flight.
+- Instead of writing custom scripts or complex integration code, we used Switch AI to connect our six local CLI agents (`ai-search-intel`, `citation-researcher`, `partner-discovery`, `partner-evaluator`, `outreach-generator`, and `growth-tracking`) into a shared chat room. By configuring each agent's **Name**, **Description**, and **Agent Instructions** directly in the Switch Console, the agents can naturally read messages, collaborate, and hand off tasks to one another using `@mentions`. 
+- **Local Execution Governance & Session Control:** Switch Console manages agent sessions, directory isolation, and execution safety (`Auto mode` runs safe research and drafting autonomously while protecting the host system), giving us a production-ready multi-agent control plane without building custom orchestration infrastructure.
 
 ### Project Overview: From AI Search Signals to Strategic Partnerships
 
@@ -26,6 +81,38 @@ Today, customer discovery has fundamentally shifted: users increasingly ask AI e
 #### 2. The Architecture & Where Switch AI Fits In
 
 Instead of running isolated terminal scripts or separate chatbot tabs, **Switch AI** acts as the live bridge connecting our 6 local CLI agent environments on the left directly into a shared Mattermost room (`#citebridge-room`) on the right where humans and agents collaborate side by side:
+
+![CiteBridge AI: How the Room Works](citebridge-architecture.png)
+
+```mermaid
+flowchart LR
+    subgraph Founder_Interface ["Founder Interface"]
+        F["Founder (Speaks Goal / Approves Drafts)"]
+        W["Wispr Flow (Voice-to-Text)"]
+        F -->|Speaks| W
+    end
+
+    subgraph Switch_Room ["Mattermost #citebridge-room (Orchestrated by Switch)"]
+        direction LR
+        A1["1. @ai-search-intel<br/>Asks AI search queries"]
+        A2["2. @citation-researcher<br/>Audits cited domains"]
+        A3["3. @partner-discovery<br/>Discovers target partners"]
+        A4["4. @partner-evaluator<br/>Scores candidate fit (1-100)"]
+        A5["5. @outreach-generator<br/>Drafts tailored pitches"]
+        A6["6. @growth-tracking<br/>Tracks SoV & rechecks pickup"]
+
+        A1 -->|Competitors & URLs| A2
+        A2 -->|Grouped sources| A3
+        A3 -->|Partner profiles| A4
+        A4 -->|Scored shortlist| A5
+        A5 -->|Waiting for OK| FA["Founder Approval Gate"]
+        FA -->|Approved| A6
+        A6 -.->|Scheduled re-check loop| A1
+    end
+
+    W -->|Injected prompt| Switch_Room
+    FA -->|Draft sent back to edit/approve| F
+```
 
 ```text
 LOCAL CLI AGENT SESSIONS                                  MATTERMOST WORKSPACE (LOCAL DOCKER)
@@ -71,11 +158,11 @@ LOCAL CLI AGENT SESSIONS                                  MATTERMOST WORKSPACE (
 
 #### 3. Why Switch AI is the Backbone of CiteBridge AI
 
-Without **Switch AI**, each terminal session on the left  would be stuck in its own isolated CLI window. Flipping **SWITCH ON** turns those separate processes into a coordinated business workflow:
+Without **Switch AI**, each terminal session on the left would be stuck in its own isolated CLI window. Flipping **SWITCH ON** turns those separate processes into a coordinated business workflow:
 
-* **Bridging Local CLI Terminals into One Room:** Switch Console connects six distinct local agent directories (`agents/<agent-name>/`) running across Claude Code, Cursor, and Codex directly into `#citebridge-room` alongside the human founder (`user`).
-* **Zero-Glue-Code Handoffs via Room Instructions:** By defining the `name`, `description`, and `instructions` in `templates/citebridge-room.yaml`, agents automatically read room history, respect turn-taking, and trigger the next specialist via `@mentions` without custom orchestration code.
-* **Real-Time Human-in-the-Loop Steering:** Because the founder (`user`) is a member of the exact same `#citebridge-room` channel as the six agents, they can jump into the chat at any step—whether via text or voice dictation (Wispr Flow)—to challenge a partner score, refine a niche, or approve `@outreach-generator`'s outreach drafts before execution.
+- **Bridging Local CLI Terminals into One Room:** Switch Console connects six distinct local agent directories (`agents/<agent-name>/`) running across Claude Code, Cursor, and Codex directly into `#citebridge-room` alongside the human founder (`user`).
+- **Zero-Glue-Code Handoffs via Room Instructions:** By defining the `name`, `description`, and `instructions` in `templates/citebridge-room.yaml`, agents automatically read room history, respect turn-taking, and trigger the next specialist via `@mentions` without custom orchestration code.
+- **Real-Time Human-in-the-Loop Steering:** Because the founder (`user`) is a member of the exact same `#citebridge-room` channel as the six agents, they can jump into the chat at any step—whether via text or voice dictation (Wispr Flow)—to challenge a partner score, refine a niche, or approve `@outreach-generator`'s outreach drafts before execution.
 
 
 ## 2. Which Agents We Connected
@@ -83,7 +170,7 @@ Without **Switch AI**, each terminal session on the left  would be stuck in its 
 We onboarded and connected **6 specialized agents** locally inside Switch Console:
 
 | Stage | Agent Name | Role & Description | Triggered By | Collaborates With / Hands Off To |
-| ----- | ----- | ----- | ----- | ----- |
+| :---: | :--- | :--- | :--- | :--- |
 | **1** | `ai-search-intel` | Scans AI search responses for target queries, maps brand visibility gaps, and identifies high-intent topic clusters. | User prompt in channel (or `@growth-tracking` loopback) | `@citation-researcher` |
 | **2** | `citation-researcher` | Extracts, categorizes, and verifies the exact third-party URLs, publications, and domains cited by AI search engines. | `@ai-search-intel` or Human in room | `@partner-discovery` |
 | **3** | `partner-discovery` | Turns verified citation sources into actionable partner profiles, identifying editorial contacts, content formats, and collaboration angles. | `@citation-researcher` or Human in room | `@partner-evaluator` |
@@ -94,11 +181,11 @@ We onboarded and connected **6 specialized agents** locally inside Switch Consol
 ## 3. How the Channel & Switch Room Are Set Up
 
 ### Messaging Channel & Local Docker Setup
-![alt text](image.png)
+![alt text](screenshots/image.png)
 
 1. **Local Mattermost Container:** Switch Console provisions a native local Mattermost server (`mattermost/mattermost-team-edition:11.9.0`) via Docker (`switchdash-local-mattermost-mattermost-1`) mapped to `127.0.0.1:51724:8065` alongside a PostgreSQL instance on port `51725`.
 2. **Docker Health Requirement:** Before deploying the room template or opening channels, verify that Docker is running and the Mattermost container is healthy (`docker ps -a`). If the container is stopped or still booting (`health: starting`), Switch Console will return a `Bridge not running` or channel unreachable error until startup finishes.
-![alt text](<Screenshot 2026-11-07 110406.png>) ![alt text](<Screenshot 2026-11-07 110421.png>) ![alt text](<Screenshot 2026-11-07 110436.png>) ![alt text](<Screenshot 2026-11-07 110453.png>)
+![alt text](<screenshots/Screenshot 2026-11-07 110406.png>) ![alt text](<screenshots/Screenshot 2026-11-07 110421.png>) ![alt text](<screenshots/Screenshot 2026-11-07 110436.png>) ![alt text](<screenshots/Screenshot 2026-11-07 110453.png>)
 3. **Switch Room Mapping:** We deploy `#citebridge-room` via **Switch Console → Templates → Use template** (or **Your Rooms → Create room**), binding all six local agents (`ai-search-intel`, `citation-researcher`, `partner-discovery`, `partner-evaluator`, `outreach-generator`, and `growth-tracking`) and the local operator (`user`) to the Mattermost channel.
 
 ### Switch Room Configuration (`templates/citebridge-room.yaml`)
@@ -124,6 +211,7 @@ Our Switch Room template defines the workspace using standard `params` and `room
 ```text
 citebridge-switch-workflow/
 ├── README.md                        # Project overview, Switch AI architecture, and local setup guide
+├── citebridge-architecture.png      # Workflow and room interaction architecture diagram
 ├── templates/
 │   └── citebridge-room.yaml         # Switch Room configuration 
 └── agents/                          # Local working directories mapped in Switch Console
@@ -171,7 +259,7 @@ In Switch Console, go to **Your Agents → + New Agent** and onboard each of the
 
 ### Step 4: Connect Your Channel & Configure the Room
 
-1. In Switch Console, go to **Settings → Connectors** and link your **Mattermost**  workspace.
+1. In Switch Console, go to your rooms and add mattermost room name `citebridge-room`.
 2. Go to **Your Rooms → + New Room**, select your target channel, add all 6 local agents, and apply the Rules, Tasks, and Decisions from `templates/citebridge-room.yaml`.
 
 ### Step 5: Start Collaborating in the Room
